@@ -1,0 +1,156 @@
+---
+description: "Standards for Next.js App Router structure, metadata, routing, and component types"
+alwaysApply: true
+globs: ["app/**/*.{ts,tsx}"]
+---
+
+# Next.js App Router Conventions
+
+## File Structure & Routing
+
+### App Directory Structure
+- Use Next.js App Router file conventions:
+  - `page.tsx` - Route pages (required for routes)
+  - `layout.tsx` - Shared layouts (wrap nested routes)
+  - `loading.tsx` - Loading UI (suspense boundary)
+  - `error.tsx` - Error UI (error boundary)
+  - `not-found.tsx` - 404 pages
+  - `template.tsx` - Shared templates (re-render on navigation)
+
+### Component Organization
+- Place reusable components in `app/components/` directory
+- Use co-located components when specific to a route
+- Keep component files in the same directory as their route when possible
+
+## Metadata
+
+### Static Metadata
+- Always export `metadata` object from layout and page files:
+```tsx
+export const metadata: Metadata = {
+  title: "Page Title",
+  description: "Page description",
+};
+```
+
+### Dynamic Metadata
+- Use `generateMetadata` function for dynamic metadata:
+```tsx
+export async function generateMetadata({ params }): Promise<Metadata> {
+  return {
+    title: `Dynamic Title - ${params.id}`,
+  };
+}
+```
+
+### Best Practices
+- Keep metadata descriptive and SEO-friendly
+- Update metadata for each page appropriately
+- Use proper page titles that reflect content
+
+## Navigation
+
+### Client-Side Navigation
+- Use `next/link` for internal navigation:
+```tsx
+import Link from "next/link";
+
+<Link href="/about">About</Link>
+```
+
+- Prefer `<Link>` components over anchor tags (`<a>`) for internal links
+- Use `next/navigation` hooks for programmatic navigation:
+```tsx
+"use client";
+import { useRouter, usePathname } from "next/navigation";
+```
+
+## Server vs Client Components
+
+### Default to Server Components
+- Server Components are the default in App Router
+- Use Server Components for:
+  - Data fetching
+  - Accessing backend resources (databases, APIs)
+  - Keeping sensitive info on server
+  - Large dependencies to reduce client bundle size
+  - Static content
+
+### Client Components
+- Add `"use client"` directive only when necessary
+- Use Client Components for:
+  - Interactivity (onClick, onChange, etc.)
+  - Browser APIs (window, localStorage, etc.)
+  - React hooks (useState, useEffect, etc.)
+  - Context providers
+  - Custom event listeners
+
+### Example Pattern
+```tsx
+// Server Component (default)
+export default function Page() {
+  return <ClientComponent />;
+}
+
+// Client Component (needs interactivity)
+"use client";
+export function ClientComponent() {
+  const [state, setState] = useState(0);
+  return <button onClick={() => setState(state + 1)}>{state}</button>;
+}
+```
+
+## TypeScript Standards
+
+### Props Types
+- Use `Readonly<>` for props when appropriate:
+```tsx
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  // ...
+}
+```
+
+### Next.js Types
+- Import types from Next.js: `Metadata`, `PageProps`, etc.
+- Use proper type inference for route params and search params
+
+## Route Groups & Organization
+
+- Use route groups `(folderName)` for organization without affecting URL structure
+- Keep routes organized logically
+- Use nested layouts for shared UI across route segments
+
+## Data Fetching
+
+- Use `async/await` in Server Components for data fetching
+- Fetch data directly in Server Components (no useEffect needed)
+- Use loading states with `loading.tsx` files
+- Handle errors with `error.tsx` files
+
+## Example: Complete Page Structure
+
+```tsx
+import type { Metadata } from "next";
+import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Page Title",
+  description: "Page description",
+};
+
+export default async function Page() {
+  // Data fetching in Server Component
+  const data = await fetchData();
+  
+  return (
+    <div>
+      <h1>{data.title}</h1>
+      <Link href="/">Home</Link>
+    </div>
+  );
+}
+```
