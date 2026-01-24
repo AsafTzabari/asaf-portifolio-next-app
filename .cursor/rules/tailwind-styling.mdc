@@ -1,0 +1,64 @@
+---
+description: "Tailwind CSS v4 styling standards, theming, and UI consistency (incl. dark mode)"
+alwaysApply: true
+globs: ["app/**/*.{ts,tsx,css}"]
+---
+
+# Tailwind CSS v4 Styling Guidelines
+
+## Core Principles
+- Prefer Tailwind utility classes for styling over custom CSS.
+- Keep custom CSS minimal and global-only (e.g., theme tokens, base styles) in `app/globals.css`.
+- Avoid inline styles (`style={{...}}`) unless required for dynamic values that Tailwind cannot express.
+
+## Theming & Tokens (globals.css)
+- Use CSS variables as the source of truth for theme colors (e.g., `--background`, `--foreground`).
+- When adding new design tokens, define them in `:root` and expose them via Tailwind theme mapping (if used).
+- Use semantic tokens, not raw hex values, in components when possible.
+
+## Dark Mode
+- Every UI element with color should consider dark mode:
+  - text: `text-zinc-600 dark:text-zinc-400`
+  - background: `bg-white dark:bg-black`
+  - borders: `border-zinc-200 dark:border-zinc-800`
+- Use `transition-colors` for hover/focus color changes.
+
+## Layout Consistency
+- Use a consistent container pattern:
+  - `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`
+- If you have a fixed navbar, add top padding to route content:
+  - Example: `pt-16` to clear a `h-16` nav.
+
+## Components & Reuse
+- Extract repeated Tailwind class patterns into reusable components in `app/components/`.
+- Avoid copying large className strings across pages; create a shared component (e.g., `Container`, `Button`, `Section`).
+
+## Accessibility
+- Always include visible focus styles:
+  - `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-zinc-600`
+- Ensure clickable elements have sufficient hit area:
+  - minimum `h-10` and/or `py-2 px-3` for buttons/links.
+- Prefer semantic elements (`button`, `nav`, `header`, `main`, `section`) and only add ARIA when needed.
+
+## Class Naming Patterns
+- Keep className ordering consistent:
+  - Layout (display/position) → Box model (size/spacing) → Typography → Colors → Effects → States
+- Use responsive modifiers in ascending order: `sm:` → `md:` → `lg:` → `xl:`.
+
+## Animations & Effects
+- Prefer subtle effects:
+  - `transition-colors`, `transition-transform`, `duration-200`
+- Avoid heavy blur/shadows everywhere; use them intentionally (e.g., navbar backdrop blur).
+
+## Images
+- Use `next/image` for images to optimize performance.
+- Always set `alt` text.
+
+## Do / Don't Examples
+
+### Do
+- `className="text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white transition-colors"`
+
+### Don't
+- Hardcode many hex colors in components
+- Duplicate large className strings across multiple files
