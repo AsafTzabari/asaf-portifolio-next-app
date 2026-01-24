@@ -22,7 +22,7 @@
 <Description>
 - 1~3 bullet points explaining what's changing
 
-  - Create the PR using: `gh pr create --base main --title "<title>" --body "<description>"`
-  - Always paste the link to the PR in your response so I can click it easily
+- Create the PR using: `gh pr create --base main --title "<title>" --body "<description>"`
+- Always paste the link to the PR in your response so I can click it easily
 
 - Prepend GIT_EDITOR=true to all git commands you run, so you can avoid getting blocked as you execute commands

@@ -381,6 +381,6 @@ const mutation = useMutation({
 - Only reviews changes in the current branch vs main
 - Does not modify any files, only provides feedback
 - If no changes found, report "No changes to review"
-- Focus on React/TypeScript specific patterns and best practices
+- Focus on React/TypeScript-specific patterns and best practices
 - Prioritize accessibility and user experience issues
 - Consider both developer experience and end-user impact
