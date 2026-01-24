@@ -213,13 +213,35 @@ Create a pull request using GitHub CLI:
 5. AI prompts: "Use this commit message? (Y/n) or type a custom message:"
    User: Y
 
-6. AI runs: git add .
-   AI runs: git commit -m "feat(homepage): add hero section component with call-to-action"
+6. AI runs: git status --porcelain
+   Output: "M  app/page.tsx\nM  app/components/Hero.tsx"
 
-7. AI runs: git push -u origin add/commit-pr-command
+7. AI runs: git status
+   Output: "Modified: app/page.tsx, app/components/Hero.tsx"
 
-8. AI runs: gh pr create --base main --title "feat(homepage): add hero section component with call-to-action" --body "Automated PR from commit: feat(homepage): add hero section component with call-to-action"
+8. AI checks for sensitive files:
+   - Scans file list for .env, .env.*, *key*, *secret*, *token*, *password*, etc.
+   - No sensitive files detected
 
-9. AI displays: "✅ PR created successfully: https://github.com/user/repo/pull/123"
+9. AI prompts: "Files to be staged:
+   - app/page.tsx
+   - app/components/Hero.tsx
+   
+   Stage these files? (Y/n)"
+   User: Y
+
+10. AI runs: git add .
+    AI runs: git status (verification)
+    Output: "Changes staged for commit"
+
+11. AI runs: git commit -m "feat(homepage): add hero section component with call-to-action"
+
+12. AI runs: git push -u origin add/commit-pr-command
+
+13. AI runs: gh pr create --base main --title "feat(homepage): add hero section component with call-to-action" --body "Automated PR from commit: feat(homepage): add hero section component with call-to-action"
+
+14. AI displays: "✅ PR created successfully: https://github.com/user/repo/pull/123"
 ```
+
+**Note**: This example includes the safety gates from Step 5 (file preview, sensitive file checks, and staging confirmation). The `/commit-pr` command requires explicit user confirmation at both the commit message prompt (step 5) and the staging confirmation prompt (step 9) before proceeding with `git add .` and `git commit -m` (steps 10-11).
 

@@ -2,7 +2,7 @@
 
 - Check that I'm in a branch other than `main`. If not, bail and explain.
 - Check the diff between my branch and the main branch of the repo
-- If there's unstaged or staged work that hasn't been commited, commit all the relevant code first
+- If there's unstaged or staged work that hasn't been committed, commit all the relevant code first
   (Use `gh` in case it's installed)
 - Write up a quick PR description in the following format
 
