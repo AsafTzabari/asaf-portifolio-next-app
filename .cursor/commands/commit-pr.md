@@ -105,9 +105,40 @@ Use this commit message? (Y/n) or type a custom message:
 
 ### 5. Stage All Changes
 
-Once the commit message is confirmed:
-- Run `git add .` to stage all changes (both staged and unstaged)
-- Verify files are staged by running `git status` again
+Once the commit message is confirmed, **preview and verify files before staging**:
+
+**Step 1: Preview files that will be staged**
+- Run `git status --porcelain` to see a clean list of all modified, added, and deleted files
+- Run `git status` to see detailed information about staged vs unstaged changes
+- Review the list carefully to identify what will be committed
+
+**Step 2: Check for sensitive files**
+- **WARNING**: Before staging, verify that no sensitive files are being added:
+  - Environment files: `.env`, `.env.local`, `.env.*`
+  - API keys and credentials: files containing `key`, `secret`, `token`, `password`, `credential` in filename
+  - Build artifacts: `dist/`, `build/`, `.next/`, `out/`, `node_modules/`
+  - Temporary files: `*.log`, `*.tmp`, `.DS_Store`
+  - Configuration with secrets: `config.json`, `secrets.json`, `credentials.json`
+  - Certificate files: `*.pem`, `*.key`, `*.cert`
+- If any sensitive files are detected, **STOP** and inform the user:
+  - List the sensitive files found
+  - Warn the user that these files should NOT be committed
+  - Suggest adding them to `.gitignore` if needed
+  - Ask the user to confirm if they want to proceed or exclude these files
+  - Do NOT proceed with staging until user explicitly confirms
+
+**Step 3: Confirm staging**
+- Present the list of files that will be staged to the user
+- Ask for confirmation: "Stage these files? (Y/n)"
+- If user confirms (Y/yes/Enter):
+  - Run `git add .` to stage all changes (both staged and unstaged)
+  - Verify files are staged by running `git status` again
+- If user declines (n/no):
+  - Inform the user that staging was cancelled
+  - Allow them to manually stage specific files if needed
+  - Exit the command
+
+**Important**: Never stage sensitive files without explicit user confirmation. Always show what will be staged before proceeding.
 
 ### 6. Commit Changes
 
@@ -121,13 +152,27 @@ Commit with the final message:
 Push the current branch to the remote repository:
 - Get the current branch name: `git branch --show-current`
 - Run `git push -u origin <branch-name>`
-- If push fails:
-  - Check if the branch exists on remote
-  - Inform the user about the error
-  - Suggest running `git push -u origin <branch-name>` manually if needed
-  - Do not exit - continue to PR creation if push succeeds later
+- **If push fails:**
+  - Present the error message to the user
+  - Explain that PR creation (step 8) requires the branch to exist on remote
+  - Ask the user if they want to retry: "Push failed. Retry? (Y/n)"
+  - If user confirms (Y/yes/Enter):
+    - Retry the push: `git push -u origin <branch-name>`
+    - If retry succeeds, continue to step 8
+    - If retry fails again, repeat the retry prompt (allow multiple retries)
+  - If user declines (n/no):
+    - Inform the user that PR creation cannot proceed without a successful push
+    - Suggest they push manually: `git push -u origin <branch-name>`
+    - Exit the command (do NOT proceed to step 8)
+- **If push succeeds:**
+  - Verify the branch is on remote
+  - Continue to step 8 (Create Pull Request)
+
+**Important**: PR creation (step 8) requires the branch to exist on remote. Do NOT proceed to step 8 if push failed. The branch must be successfully pushed before creating a PR.
 
 ### 8. Create Pull Request
+
+**Prerequisite**: This step requires that step 7 (Push to Remote) completed successfully. The branch must exist on remote before creating a PR.
 
 Create a pull request using GitHub CLI:
 - Verify GitHub CLI is available: Run `gh --version` (if not available, inform user and exit)
