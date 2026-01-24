@@ -1,0 +1,37 @@
+---
+description: "Portfolio-specific standards: SEO/metadata, accessibility, performance, and content structure"
+alwaysApply: true
+globs: ["app/**/*.{ts,tsx}"]
+---
+
+# Portfolio Website Standards
+
+## SEO & Metadata
+- Every route (`page.tsx` / `layout.tsx`) must have meaningful `metadata` (title + description).
+- Use descriptive, human-readable titles (include your name/role when relevant).
+- Add Open Graph and Twitter metadata for share previews when applicable.
+- Prefer `generateMetadata` when content is dynamic.
+- Use one `h1` per page and keep heading hierarchy valid (`h1` → `h2` → `h3`).
+
+## Accessibility
+- Prefer semantic HTML (`main`, `header`, `nav`, `section`, `article`, `footer`).
+- All interactive elements must be keyboard reachable and have visible focus styles.
+- Provide accessible names for icon-only buttons/links (`aria-label` when needed).
+- Ensure color contrast works in light and dark mode.
+- Images must have meaningful `alt` text (decorative images should use empty alt: `alt=""`).
+
+## Performance
+- Use `next/image` for images and always provide `alt`.
+- Avoid layout shift: set image sizes/aspect ratio and avoid late-loading critical layout elements.
+- Keep client components small; do not add `"use client"` unless required.
+- Prefer Server Components for content and data fetching.
+
+## Content Structure
+- Use a consistent section layout (hero, projects, skills, about, contact).
+- Keep copy concise and outcome-focused (impact, tools used, links to demo/source).
+- External links should open safely: `target="_blank"` with `rel="noopener noreferrer"`.
+
+## Contact / Forms (if added)
+- Prefer Server Actions or API routes for submissions.
+- Validate and sanitize input on the server.
+- Never expose secrets in the client; use environment variables server-side only.
