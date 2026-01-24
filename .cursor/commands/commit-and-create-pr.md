@@ -90,7 +90,7 @@ After analyzing the changes, present the suggested commit message clearly to the
 Present the suggested commit message and ask for user confirmation:
 
 **Prompt format**:
-```
+```text
 Suggested commit message:
 [type(scope): description]
 
@@ -107,12 +107,12 @@ Use this commit message? (Y/n) or type a custom message:
 
 Once the commit message is confirmed, **preview and verify files before staging**:
 
-**Step 1: Preview files that will be staged**
+#### Step 1: Preview files that will be staged
 - Run `git status --porcelain` to see a clean list of all modified, added, and deleted files
 - Run `git status` to see detailed information about staged vs unstaged changes
 - Review the list carefully to identify what will be committed
 
-**Step 2: Check for sensitive files**
+#### Step 2: Check for sensitive files
 - **WARNING**: Before staging, verify that no sensitive files are being added:
   - Environment files: `.env`, `.env.local`, `.env.*`
   - API keys and credentials: files containing `key`, `secret`, `token`, `password`, `credential` in filename
@@ -127,7 +127,7 @@ Once the commit message is confirmed, **preview and verify files before staging*
   - Ask the user to confirm if they want to proceed or exclude these files
   - Do NOT proceed with staging until user explicitly confirms
 
-**Step 3: Confirm staging**
+#### Step 3: Confirm staging
 - Present the list of files that will be staged to the user
 - Ask for confirmation: "Stage these files? (Y/n)"
 - If user confirms (Y/yes/Enter):
@@ -178,7 +178,7 @@ Create a pull request using GitHub CLI:
 - Verify GitHub CLI is available: Run `gh --version` (if not available, inform user and exit)
 - Check GitHub CLI authentication: Run `gh auth status` (if not authenticated, inform user and exit)
 - Create PR with:
-  ```
+  ```shell
   gh pr create --base main --title "<commit-message>" --body "Automated PR from commit: <commit-message>"
   ```
 - If PR creation fails:
@@ -199,7 +199,7 @@ Create a pull request using GitHub CLI:
 
 ## Example Workflow
 
-```
+```text
 1. User types: /commit-pr
 
 2. AI runs: git status
