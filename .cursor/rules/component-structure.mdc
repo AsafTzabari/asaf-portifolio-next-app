@@ -1,0 +1,59 @@
+---
+description: "React/Next component structure, naming, exports, and TypeScript prop conventions"
+alwaysApply: false
+globs: ["app/components/**/*.{ts,tsx}", "app/**/components/**/*.{ts,tsx}"]
+---
+
+# Component Structure Guidelines
+
+## What goes where
+- Reusable components belong in `app/components/`.
+- Route-specific components should be co-located near their route (e.g. `app/about/components/...`).
+
+## Exports
+- Use **named exports** for components in `app/components/`.
+- Avoid `export default` for reusable components.
+- Only Next.js route files (`page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`, `not-found.tsx`) should use `export default`.
+
+## File naming
+- Use `PascalCase.tsx` for components (e.g. `ProjectCard.tsx`, `SectionHeader.tsx`).
+- One main component per file.
+
+## TypeScript props
+- Define a `Props` type/interface above the component.
+- Prefer explicit types; avoid `any`.
+- Use `Readonly<>` for props where appropriate.
+
+## Client vs Server
+- Do not add `"use client"` unless needed (hooks, event handlers, browser APIs).
+- If a component needs `"use client"`, keep it as small as possible and pass data down via props.
+
+## Imports order
+1. React/Next imports
+2. Third-party libs
+3. Local imports (absolute `@/` first, then relative)
+4. Styles last (if any)
+
+## Component template
+```tsx
+import type { ReactNode } from "react";
+
+export type ComponentNameProps = Readonly<{
+  title: string;
+  children?: ReactNode;
+}>;
+
+export function ComponentName({ title, children }: ComponentNameProps) {
+  return (
+    <section>
+      <h2>{title}</h2>
+      {children}
+    </section>
+  );
+}
+```
+
+## ClassName conventions
+- Keep class ordering consistent:
+  Layout → Spacing/Sizing → Typography → Colors → Effects → States
+- Prefer Tailwind utilities; avoid custom CSS except global tokens/base styles.
